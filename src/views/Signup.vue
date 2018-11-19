@@ -2,9 +2,9 @@
   <div class="max-w-sm m-auto mt-24">
     <div class="bg-white border border-grey-ligher rounded">
       <div class="bg-grey-lighter border-b border-grey-ligher p-3">
-        <h2 class="text-md mb-0 mt-0">Login</h2>
+        <h2 class="text-md mb-0 mt-0">Signup</h2>
       </div>
-      <form @submit.prevent="handlerLogin" class="p-3">
+      <form @submit.prevent="handlerSignup" class="p-3">
         <p
           class="text-red-light mt-3 mb-3"
           v-if="errorText"
@@ -23,16 +23,16 @@
             v-model="password"
           />
         </div>
-        <button class="btn" @click.prevent="handlerLogin">Enter Chat</button>
+        <button class="btn" @click.prevent="handlerSignup">Signup</button>
       </form>
       <div class="bg-yellow-dark px-3 py-4">
         <p class="mb-0 text-yellow-darker">
-          Haven't account?
+          Already signed up?
           <router-link
             tag="a"
-            :to="{ name: 'signup' }"
+            :to="{ name: 'login' }"
             class="no-underline text-blue"
-            >Signup here</router-link
+            >Login here</router-link
           >
           instead.
         </p>
@@ -53,23 +53,18 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['login']),
-    handlerLogin() {
+    ...mapActions(['signup']),
+    handlerSignup() {
       if (this.email && this.password) {
         const user = {
           email: this.email,
           password: this.password
         };
 
-        this.login(user)
+        this.signup(user)
           .then(res => {
-            if (res) {
-              this.$router.push({
-                name: 'home',
-                params: {
-                  name: this.email
-                }
-              });
+            if (res.additionalUserInfo.isNewUser) {
+              this.$router.push({ name: 'login' });
             }
           })
           .catch(err => {
