@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import firebaseApp from '@/firebase';
+import router from './router';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    loggedIn: false
+    loggedIn: false,
+    errorText: ''
   },
   getters: {
     isAuthenticated: state => state.loggedIn
@@ -21,54 +23,66 @@ export default new Vuex.Store({
     },
     REGISTER: state => {
       console.log(state);
+    },
+    ERROR_TEXT: (state, msg) => {
+      state.errorText = msg;
     }
   },
   actions: {
     login({ commit }, user) {
       const { email, password } = user;
 
-      return new Promise((resolve, reject) => {
+      if (email && password) {
         firebaseApp
           .auth()
           .signInWithEmailAndPassword(email, password)
           .then(res => {
-            commit('LOGIN');
-            resolve(res);
+            if (res) {
+              commit('LOGIN');
+              router.push({
+                name: 'home',
+                params: { name: email }
+              });
+            }
           })
           .catch(error => {
-            reject(error.message);
+            commit('ERROR_TEXT', error.message);
           });
-      });
+      } else {
+        commit('ERROR_TEXT', 'Required email and password.');
+      }
     },
     logout({ commit }) {
-      return new Promise((resolve, reject) => {
-        firebaseApp
-          .auth()
-          .signOut()
-          .then(function() {
-            commit('LOGOUT');
-            resolve();
-          })
-          .catch(function(error) {
-            reject(error.message);
-          });
-      });
+      firebaseApp
+        .auth()
+        .signOut()
+        .then(() => {
+          commit('LOGOUT');
+          router.push({ name: 'login' });
+        })
+        .catch(() => {
+          router.push({ name: 'login' });
+        });
     },
     signup({ commit }, user) {
       const { email, password } = user;
 
-      return new Promise((resolve, reject) => {
+      if (email && password) {
         firebaseApp
           .auth()
           .createUserWithEmailAndPassword(email, password)
           .then(res => {
-            commit('REGISTER');
-            resolve(res);
+            if (res.additionalUserInfo.isNewUser) {
+              commit('REGISTER');
+              router.push({ name: 'login' });
+            }
           })
           .catch(error => {
-            reject(error.message);
+            commit('ERROR_TEXT', error.message);
           });
-      });
+      } else {
+        commit('ERROR_TEXT', 'Required email and password.');
+      }
     }
   }
 });

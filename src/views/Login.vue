@@ -1,21 +1,21 @@
 <template>
   <div class="max-w-sm m-auto mt-24">
-    <div class="bg-white border border-grey-ligher rounded">
+    <div class="bg-white border border-grey-ligher rounded shadow">
       <div class="bg-grey-lighter border-b border-grey-ligher p-3">
         <h2 class="text-md mb-0 mt-0">Login</h2>
       </div>
-      <form @submit.prevent="handlerLogin" class="p-3">
+      <form @submit.prevent="login({ email, password });" class="p-3 mb-5">
         <p
-          class="text-red-light mt-3 mb-3"
+          class="text-red-light mt-3 mb-4"
           v-if="errorText"
           v-text="errorText"
         ></p>
         <div class="mb-4">
-          <label for="email" class="block mb-2">Email</label>
+          <label for="email" class="block mb-3">Email</label>
           <input placeholder="Email" class="input" v-model="email" />
         </div>
         <div class="mb-4">
-          <label for="email" class="block mb-2">Password</label>
+          <label for="password" class="block mb-3">Password</label>
           <input
             placeholder="Password"
             type="password"
@@ -23,15 +23,17 @@
             v-model="password"
           />
         </div>
-        <button class="btn" @click.prevent="handlerLogin">Enter Chat</button>
+        <button class="btn" @click.prevent="login({ email, password });">
+          Enter Chat
+        </button>
       </form>
-      <div class="bg-yellow-dark px-3 py-4">
-        <p class="mb-0 text-yellow-darker">
+      <div class="bg-grey-lighter px-3 py-4">
+        <p class="mb-0 text-grey-dark">
           Haven't account?
           <router-link
             tag="a"
             :to="{ name: 'signup' }"
-            class="no-underline text-blue"
+            class="no-underline text-black font-semibold hover:underline"
             >Signup here</router-link
           >
           instead.
@@ -42,50 +44,29 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       email: '',
-      password: '',
-      errorText: ''
+      password: ''
     };
   },
+  computed: {
+    ...mapState({
+      errorText: state => state.errorText
+    })
+  },
   methods: {
-    ...mapActions(['login']),
-    handlerLogin() {
-      if (this.email && this.password) {
-        const user = {
-          email: this.email,
-          password: this.password
-        };
-
-        this.login(user)
-          .then(res => {
-            if (res) {
-              this.$router.push({
-                name: 'home',
-                params: {
-                  name: this.email
-                }
-              });
-            }
-          })
-          .catch(err => {
-            this.errorText = err;
-          });
-      } else {
-        this.errorText = 'Required email and password.';
-      }
-    }
+    ...mapActions(['login'])
   }
 };
 </script>
 
 <style scoped>
 .input {
-  @apply .w-full .p-3 .border .border-grey-lighter .shadow-md .rounded;
+  @apply .w-full .p-3 .border .border-grey .rounded;
 }
 
 .btn {

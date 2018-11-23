@@ -8,7 +8,7 @@
         <input
           placeholder="Type a message..."
           v-model="newMessage"
-          class="p-2 w-full"
+          class="p-2 w-full border border-grey"
         />
       </div>
       <button @click.prevent="createMessage" class="px-2">

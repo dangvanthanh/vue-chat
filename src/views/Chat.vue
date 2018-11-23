@@ -4,8 +4,8 @@
       Real Time Chat
       <a
         href="#"
-        class="px-2 py-1 rounded border border-blue no-underline text-blue text-sm inline-block font-normal align-middle absolute pin-r pin-t hover:bg-blue hover:text-white"
-        @click.prevent="handlerLogout"
+        class="btn-logout hover:bg-blue hover:text-white"
+        @click.prevent="logout"
       >
         Logout
       </a>
@@ -33,7 +33,7 @@
           <p class="leading-normal">{{ message.message }}</p>
         </div>
       </div>
-      <div class="absolute pin-b w-full max-w-md">
+      <div class="absolute pin-b w-full max-w-md bg-grey-lighter">
         <CreateMessage :name="name" />
       </div>
     </div>
@@ -58,6 +58,8 @@ export default {
   created() {
     let ref = firebaseDb.collection('messages').orderBy('timestamp');
 
+    console.log(ref);
+
     ref.onSnapshot(snapshot => {
       snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
@@ -73,16 +75,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['logout']),
-    handlerLogout() {
-      this.logout()
-        .then(() => {
-          this.$router.push({ name: 'login' });
-        })
-        .catch(() => {
-          this.$router.push({ name: 'login' });
-        });
-    }
+    ...mapActions(['logout'])
   }
 };
 </script>
@@ -90,5 +83,11 @@ export default {
 <style scoped>
 .messages {
   height: calc(100vh - 150px);
+}
+
+.btn-logout {
+  @apply .px-3 .py-2 .rounded .bg-grey-darkest .border 
+    .border-grey .no-underline .text-white .text-sm .inline-block 
+    .font-normal .align-middle .absolute .pin-r .pin-t;
 }
 </style>
