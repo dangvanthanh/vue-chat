@@ -3,26 +3,26 @@ jobs:
   build:
     docker:
       - image: circleci/node:8
-
     working_directory: ~/vue-chat
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-
       - run:
           name: Install Packages
           command: npm install
-
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
       - run:
           name: Deploy Surge
           command: npm run deploy
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - build
