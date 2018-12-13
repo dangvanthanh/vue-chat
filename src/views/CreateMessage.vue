@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-md">
+  <div>
     <form
       @submit.prevent="createMessage"
       class="flex border border-grey-ligher shadow-md px-3 py-2"

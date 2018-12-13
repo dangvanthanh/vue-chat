@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-md m-auto">
-    <h2 class="text-3xl mt-4 relative">
+  <div class="m-auto">
+    <h2 class="text-3xl mt-4 relative px-6">
       Real Time Chat
       <a
         href="#"
@@ -10,7 +10,7 @@
         Logout
       </a>
     </h2>
-    <div class="mt-4 mb-4 overflow-x-auto messages" v-chat-scroll>
+    <div class="mt-4 mb-4 overflow-x-auto messages px-6" v-chat-scroll>
       <div
         v-for="message in messages"
         :key="message.id"
@@ -33,9 +33,9 @@
           <p class="leading-normal">{{ message.message }}</p>
         </div>
       </div>
-      <div class="absolute pin-b w-full max-w-md bg-grey-lighter">
-        <CreateMessage :name="name" />
-      </div>
+    </div>
+    <div class="absolute pin-b w-full bg-grey-lighter">
+      <CreateMessage :name="name" />
     </div>
   </div>
 </template>
@@ -57,8 +57,6 @@ export default {
   },
   created() {
     let ref = firebaseDb.collection('messages').orderBy('timestamp');
-
-    console.log(ref);
 
     ref.onSnapshot(snapshot => {
       snapshot.docChanges().forEach(change => {
@@ -88,6 +86,7 @@ export default {
 .btn-logout {
   @apply .px-3 .py-2 .rounded .bg-grey-darkest .border 
     .border-grey .no-underline .text-white .text-sm .inline-block 
-    .font-normal .align-middle .absolute .pin-r .pin-t;
+    .font-normal .align-middle .absolute .pin-t;
+  right: 1.5rem;
 }
 </style>

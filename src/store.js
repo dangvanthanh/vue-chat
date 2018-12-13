@@ -26,6 +26,9 @@ export default new Vuex.Store({
     },
     ERROR_TEXT: (state, msg) => {
       state.errorText = msg;
+    },
+    RESET: state => {
+      state.errorText = '';
     }
   },
   actions: {
@@ -83,6 +86,9 @@ export default new Vuex.Store({
       } else {
         commit('ERROR_TEXT', 'Required email and password.');
       }
+    },
+    reset({ commit }) {
+      commit('RESET');
     }
   }
 });

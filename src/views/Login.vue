@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-sm m-auto mt-24">
-    <div class="bg-white border border-grey-ligher rounded shadow">
+    <div class="border-t-4 border-teal-dark overflow-hidden rounded shadow-md">
       <div class="bg-grey-lighter border-b border-grey-ligher p-3">
         <h2 class="text-md mb-0 mt-0">Login</h2>
       </div>
@@ -57,6 +57,9 @@ export default {
     ...mapState({
       errorText: state => state.errorText
     })
+  },
+  created() {
+    this.$store.dispatch('reset');
   },
   methods: {
     ...mapActions(['login'])
