@@ -21,9 +21,7 @@ export default new Vuex.Store({
     LOGOUT: state => {
       state.loggedIn = false;
     },
-    REGISTER: state => {
-      console.log(state);
-    },
+    REGISTER: state => {},
     ERROR_TEXT: (state, msg) => {
       state.errorText = msg;
     },
